@@ -1,0 +1,112 @@
+{
+    "name": "Krayin CRM",
+    "description": "CRM Laravel open-source completo para gerenciamento do ciclo de vida do cliente. Inclui gestão de leads, contatos, produtos, cotações, atividades e automação de marketing.",
+    "logo": "https://raw.githubusercontent.com/krayin/temp-media/master/krayin-logo.png",
+    "services": [
+        {
+            "type": "app",
+            "data": {
+                "projectName": "krayin-crm",
+                "serviceName": "krayin",
+                "source": {
+                    "type": "github",
+                    "owner": "krayin",
+                    "repo": "laravel-crm",
+                    "ref": "master"
+                },
+                "build": {
+                    "type": "dockerfile",
+                    "dockerfile": "Dockerfile"
+                },
+                "domains": [
+                    {
+                        "host": "$(EASYPANEL_DOMAIN)",
+                        "port": 80
+                    }
+                ],
+                "env": [
+                    "APP_NAME=Krayin CRM",
+                    "APP_ENV=production",
+                    "APP_DEBUG=false",
+                    "APP_URL=https://$(PRIMARY_DOMAIN)",
+                    "APP_TIMEZONE=UTC",
+                    "APP_LOCALE=pt_BR",
+                    "APP_CURRENCY=BRL",
+                    "LOG_CHANNEL=stderr",
+                    "LOG_LEVEL=info",
+                    "DB_CONNECTION=mysql",
+                    "DB_HOST=$(PROJECT_NAME)_mysql",
+                    "DB_PORT=3306",
+                    "DB_DATABASE=krayin",
+                    "DB_USERNAME=krayin",
+                    "DB_PASSWORD=$(SECRET_DB_PASSWORD)",
+                    "REDIS_HOST=$(PROJECT_NAME)_redis",
+                    "REDIS_PASSWORD=",
+                    "REDIS_PORT=6379",
+                    "CACHE_DRIVER=redis",
+                    "SESSION_DRIVER=redis",
+                    "QUEUE_CONNECTION=redis",
+                    "MAIL_MAILER=smtp",
+                    "MAIL_HOST=",
+                    "MAIL_PORT=587",
+                    "MAIL_USERNAME=",
+                    "MAIL_PASSWORD=",
+                    "MAIL_ENCRYPTION=tls",
+                    "MAIL_FROM_ADDRESS=noreply@$(PRIMARY_DOMAIN)",
+                    "MAIL_FROM_NAME=Krayin CRM"
+                ],
+                "mounts": [
+                    {
+                        "type": "volume",
+                        "name": "storage",
+                        "mountPath": "/var/www/html/storage"
+                    },
+                    {
+                        "type": "volume",
+                        "name": "bootstrap-cache",
+                        "mountPath": "/var/www/html/bootstrap/cache"
+                    }
+                ],
+                "deploy": {
+                    "replicas": 1,
+                    "command": null,
+                    "zeroDowntime": true
+                }
+            }
+        },
+        {
+            "type": "mysql",
+            "data": {
+                "projectName": "krayin-crm",
+                "serviceName": "mysql",
+                "password": "$(SECRET_DB_PASSWORD)",
+                "image": "mysql:8.0",
+                "mounts": [
+                    {
+                        "type": "volume",
+                        "name": "mysql-data",
+                        "mountPath": "/var/lib/mysql"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "redis",
+            "data": {
+                "projectName": "krayin-crm",
+                "serviceName": "redis",
+                "image": "redis:7-alpine",
+                "mounts": [
+                    {
+                        "type": "volume",
+                        "name": "redis-data",
+                        "mountPath": "/data"
+                    }
+                ]
+            }
+        }
+    ],
+    "instructions": {
+        "start": "Após o deployment:\n\n1. Aguarde 2-3 minutos para a instalação inicial completar\n2. Acesse sua URL configurada\n3. Faça login com as credenciais padrão:\n   - Email: admin@example.com\n   - Senha: admin123\n\n⚠️ IMPORTANTE: Altere a senha do admin imediatamente após o primeiro login!\n\nPara configurar email (opcional):\n1. Vá em Settings → Environment Variables\n2. Configure MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD\n3. Reinicie o serviço\n\nPara mais informações, consulte: https://devdocs.krayincrm.com"
+    }
+}
