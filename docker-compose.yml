@@ -1,12 +1,9 @@
-version: '3.8'
-
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     image: krayin-crm:latest
-    container_name: krayin-app
     restart: unless-stopped
     environment:
       - APP_NAME=${APP_NAME:-Krayin CRM}
@@ -14,22 +11,18 @@ services:
       - APP_DEBUG=${APP_DEBUG:-false}
       - APP_URL=${APP_URL:-http://localhost}
       - APP_TIMEZONE=${APP_TIMEZONE:-UTC}
-
       - DB_CONNECTION=mysql
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_DATABASE=${DB_DATABASE:-krayin}
       - DB_USERNAME=${DB_USERNAME:-krayin}
       - DB_PASSWORD=${DB_PASSWORD:-krayin_password}
-
       - REDIS_HOST=redis
       - REDIS_PASSWORD=${REDIS_PASSWORD:-null}
       - REDIS_PORT=6379
-
       - CACHE_DRIVER=redis
       - SESSION_DRIVER=redis
       - QUEUE_CONNECTION=redis
-
       - MAIL_MAILER=${MAIL_MAILER:-smtp}
       - MAIL_HOST=${MAIL_HOST:-mailhog}
       - MAIL_PORT=${MAIL_PORT:-1025}
@@ -42,7 +35,7 @@ services:
       - storage_data:/var/www/html/storage
       - bootstrap_cache:/var/www/html/bootstrap/cache
     ports:
-      - "${APP_PORT:-8080}:80"
+      - "80"
     depends_on:
       mysql:
         condition: service_healthy
@@ -59,7 +52,6 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: krayin-mysql
     restart: unless-stopped
     environment:
       - MYSQL_DATABASE=${DB_DATABASE:-krayin}
@@ -68,8 +60,6 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-root_password}
     volumes:
       - mysql_data:/var/lib/mysql
-    ports:
-      - "${MYSQL_PORT:-3306}:3306"
     networks:
       - krayin-network
     healthcheck:
@@ -82,10 +72,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: krayin-redis
     restart: unless-stopped
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
     networks:
