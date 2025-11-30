@@ -77,16 +77,62 @@ Abra seu navegador em: `http://localhost:8080`
 
 ## Configuração
 
-### Variáveis de Ambiente Principais
+### Variáveis de Ambiente para EasyPanel
 
-Edite o arquivo `.env` para personalizar sua instalação:
+Para facilitar a configuração no EasyPanel, use o arquivo `.env.easypanel.example` que contém **apenas as variáveis essenciais** com comentários em português.
+
+**Copie o conteúdo de [.env.easypanel.example](file:///H:/ANTIGRAVITY%20-%20KRAYIN/laravel-crm/.env.easypanel.example) e cole na aba "Environment" do seu serviço no EasyPanel.**
+
+#### Variáveis Obrigatórias:
+
+```env
+# Aplicação
+APP_NAME='Krayin CRM'
+APP_ENV=production
+APP_KEY=base64:GERAR_AUTOMATICAMENTE
+APP_DEBUG=false
+APP_URL=https://seu-dominio.easypanel.host
+
+# Banco de Dados
+DB_HOST=projeto01_projeto01_mysql  # Nome do serviço MySQL no EasyPanel
+DB_DATABASE=krayin
+DB_USERNAME=krayin
+DB_PASSWORD=SENHA_GERADA_PELO_EASYPANEL
+
+# Redis (Cache/Sessões/Filas)
+REDIS_HOST=redis-krayin  # Nome do serviço Redis no EasyPanel
+REDIS_PASSWORD=SENHA_DO_REDIS_NO_EASYPANEL
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+```
+
+#### Variáveis Opcionais (Email):
+
+```env
+# Configurar apenas se for usar envio de emails
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=seu-email@gmail.com
+MAIL_PASSWORD=sua-senha-app
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@seu-dominio.com
+```
+
+> 💡 **Dica**: Remova variáveis não utilizadas (AWS, Pusher, IMAP, etc.) para manter o ambiente limpo.
+
+### Variáveis de Ambiente para Docker Compose Local
+
+Edite o arquivo `.env` para personalizar sua instalação local:
 
 ```env
 # Aplicação
 APP_NAME='Krayin CRM'
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://seu-dominio.com
+APP_URL=http://localhost:8080
+
 
 # Banco de Dados
 DB_HOST=mysql
